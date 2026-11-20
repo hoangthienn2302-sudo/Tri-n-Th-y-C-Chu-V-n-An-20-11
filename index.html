@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chào mừng Ngày Nhà giáo Việt Nam 20/11</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Lora:wght@500;700&family=Be+Vietnam+Pro:wght@400;500&display=swap&subset=vietnamese" rel="stylesheet">
+<style>
+/* ===== 1. MÀU SẮC & FONT (chỉnh tại đây) ===== */
+:root{
+  --cream:#fbf1d6;      /* vàng kem nền */
+  --cream-2:#f6e3b4;
+  --coral:#ee7a5c;      /* cam san hô */
+  --coral-dark:#c9553a;
+  --leaf:#4f8a45;       /* xanh lá */
+  --leaf-dark:#2f5e2f;
+  --ink:#4a3526;
+  --f-title:'Lora',Georgia,serif;
+  --f-hand:'Dancing Script','Segoe Script',cursive;
+  --f-body:'Be Vietnam Pro',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0}
+html,body{min-height:100%}
+body{
+  font-family:var(--f-body);color:var(--ink);
+  background:radial-gradient(ellipse at 50% 0%,#fff8e3 0%,var(--cream) 45%,var(--cream-2) 100%) fixed;
+  overflow-x:hidden;
+}
+canvas{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+#bg{z-index:0}
+#fx{z-index:50}
+main{position:relative;z-index:1;max-width:820px;margin:0 auto;padding:28px 16px 70px}
+
+/* ===== 2. TIÊU ĐỀ ===== */
+h1{font-family:var(--f-title);text-align:center;color:var(--coral-dark);line-height:1.25;font-size:clamp(1.35rem,4.6vw,2.2rem)}
+h1 small{display:block;margin-top:8px;font-family:var(--f-hand);font-weight:700;color:var(--leaf-dark);font-size:clamp(1.4rem,5vw,2.1rem)}
+
+/* ===== 3. CÂY TRI ÂN ===== */
+.tree-wrap{position:relative;width:min(100%,640px);aspect-ratio:600/560;margin:10px auto 0}
+.tree-wrap svg{position:absolute;inset:0;width:100%;height:100%}
+.env{
+  position:absolute;width:clamp(40px,9vw,58px);aspect-ratio:7/5;padding:0;border:0;background:none;cursor:pointer;
+  transform-origin:50% -18px;animation:sway 4s ease-in-out infinite;
+  filter:drop-shadow(0 3px 2px rgba(60,40,10,.35));
+}
+.env::before{content:"";position:absolute;left:50%;bottom:100%;width:1px;height:16px;background:#6b4a2b}
+.env .body{position:absolute;inset:0;background:#fffaf0;border:2px solid var(--coral);border-radius:3px}
+.env .flap{position:absolute;inset:0;background:var(--coral);clip-path:polygon(0 0,100% 0,50% 62%)}
+.env .seal{position:absolute;left:50%;top:42%;width:14px;height:14px;transform:translate(-50%,-50%) rotate(-45deg);background:var(--coral-dark);border-radius:2px 2px 0 0}
+.env .seal::before,.env .seal::after{content:"";position:absolute;width:14px;height:14px;background:inherit;border-radius:50%}
+.env .seal::before{left:-7px}.env .seal::after{top:-7px}
+.env .tag{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:3px;white-space:nowrap;max-width:90px;overflow:hidden;text-overflow:ellipsis;
+  font-size:.62rem;background:#fffaf0;padding:1px 6px;border-radius:8px;color:var(--ink)}
+.env:hover,.env:focus-visible{transform:scale(1.18);animation-play-state:paused;outline:none}
+.env:focus-visible .body{outline:3px solid var(--leaf-dark)}
+.env.new{animation:drop .9s cubic-bezier(.2,1.4,.4,1),sway 4s ease-in-out .9s infinite}
+@keyframes sway{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+@keyframes drop{from{transform:translateY(-120px) scale(.3);opacity:0}to{opacity:1}}
+.hint{text-align:center;font-size:.85rem;margin-top:6px;opacity:.75}
+
+/* ===== MODAL ĐỌC THƯ ===== */
+.modal{position:fixed;inset:0;z-index:100;display:none;place-items:center;padding:18px;background:rgba(60,35,15,.5)}
+.modal.open{display:grid}
+.paper{
+  position:relative;width:min(92vw,440px);max-height:86vh;overflow:auto;padding:30px 26px 26px 44px;
+  background:repeating-linear-gradient(#fffdf4 0 31px,#cfe0c4 31px 32px);
+  border-left:2px solid var(--coral);border-radius:4px;box-shadow:0 18px 50px rgba(0,0,0,.4);
+  transform:rotate(-1deg);animation:unfold .35s ease-out;
+}
+@keyframes unfold{from{transform:scale(.6) rotate(-6deg);opacity:0}}
+.paper .cls{font-family:var(--f-hand);font-weight:700;font-size:1.7rem;color:var(--coral-dark);line-height:32px;margin-bottom:6px}
+.paper .msg{font-family:var(--f-hand);font-size:1.45rem;line-height:32px;white-space:pre-wrap;word-break:break-word}
+.paper .x{position:absolute;top:6px;right:8px;border:0;background:none;font-size:1.6rem;cursor:pointer;color:var(--ink)}
+
+.paper .photo{display:none;width:min(70%,220px);margin:6px auto 14px;padding:8px 8px 26px;background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.3);transform:rotate(2deg)}
+.paper .photo img{display:block;width:100%;aspect-ratio:1;object-fit:cover}
+.guide{width:min(92vw,420px);padding:26px 24px;background:#fffaf0;border-radius:10px;border-top:6px solid var(--coral);box-shadow:0 18px 50px rgba(0,0,0,.4);animation:unfold .35s ease-out}
+.guide h2{font-family:var(--f-title);font-size:1.2rem;color:var(--coral-dark);line-height:1.35;margin-bottom:14px}
+.guide ul{padding-left:20px;line-height:1.7;margin-bottom:14px}
+.guide li::marker{color:var(--leaf)}
+.guide p{font-family:var(--f-hand);font-size:1.5rem;color:var(--leaf-dark);margin-bottom:12px}
+.guide button{display:block;margin:0 auto;padding:10px 26px;border:0;border-radius:30px;cursor:pointer;font:500 1rem var(--f-body);color:#fff;background:linear-gradient(135deg,var(--coral),var(--coral-dark))}
+.guide button:focus-visible{outline:3px solid var(--leaf-dark);outline-offset:2px}
+
+/* ===== 4. BƯU THIẾP GỬI LỜI CHÚC ===== */
+.card{
+  position:relative;margin:22px auto 0;width:min(100%,560px);padding:22px 20px 20px;background:#fffaf0;border-radius:6px;
+  box-shadow:0 8px 24px rgba(90,60,20,.25);
+  border:3px dashed transparent;
+  background-image:linear-gradient(#fffaf0,#fffaf0),repeating-linear-gradient(135deg,var(--coral) 0 14px,#fffaf0 14px 22px,var(--leaf) 22px 36px,#fffaf0 36px 44px);
+  background-origin:border-box;background-clip:padding-box,border-box;
+}
+.card h2{font-family:var(--f-hand);font-size:1.9rem;color:var(--leaf-dark);text-align:center;margin-bottom:12px}
+.card label{display:block;font-size:.85rem;font-weight:500;margin:10px 0 4px}
+.card input,.card textarea{
+  width:100%;font:inherit;font-family:var(--f-hand);font-size:1.3rem;color:var(--ink);padding:6px 4px;
+  border:0;border-bottom:2px solid var(--cream-2);background:transparent;resize:vertical;
+}
+.card input:focus,.card textarea:focus{outline:none;border-color:var(--coral)}
+.card textarea{min-height:96px}
+.card button[type=submit]{
+  display:block;margin:16px auto 0;padding:11px 28px;border:0;border-radius:30px;cursor:pointer;
+  font:500 1rem var(--f-body);color:#fff;background:linear-gradient(135deg,var(--coral),var(--coral-dark));box-shadow:0 4px 10px rgba(201,85,58,.4);
+}
+.card button:active{transform:translateY(1px)}
+.card button:focus-visible{outline:3px solid var(--leaf-dark);outline-offset:2px}
+.stamp{position:absolute;top:12px;right:14px;width:42px;height:50px;border:2px dashed var(--coral);display:grid;place-items:center;font-size:1.3rem;transform:rotate(5deg)}
+
+.credit{text-align:center;margin-top:34px;font-family:var(--f-hand);font-size:1.4rem;color:var(--leaf-dark)}
+.credit strong{color:var(--coral-dark)}
+
+/* ===== 5. NÚT NHẠC (ĐĨA THAN) ===== */
+#music{
+  position:fixed;right:14px;bottom:14px;z-index:60;width:56px;height:56px;border-radius:50%;border:0;padding:0;cursor:pointer;
+  background:radial-gradient(circle,var(--coral) 0 18%,#2b2118 19% 22%,#3a2d21 23% 46%,#2b2118 47% 52%,#3a2d21 53%);
+  box-shadow:0 4px 14px rgba(0,0,0,.4);animation:spin 4s linear infinite;animation-play-state:paused;
+}
+#music::after{content:"";position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,transparent 0 20%,rgba(255,255,255,.25) 25%,transparent 30% 70%,rgba(255,255,255,.25) 75%,transparent 80%)}
+#music.on{animation-play-state:running}
+#music:focus-visible{outline:3px solid var(--leaf-dark);outline-offset:3px}
+#musicLabel{position:fixed;right:78px;bottom:28px;z-index:60;font-size:.75rem;background:#fffaf0;padding:3px 10px;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.env,.env.new,#music{animation:none}}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<canvas id="fx"></canvas>
+
+<main>
+  <h1>Chào mừng Ngày Nhà giáo Việt Nam 20/11 -<small>Tri ân những người lái đò thầm lặng</small></h1>
+
+  <!-- ===== CÂY TRI ÂN (SVG) ===== -->
+  <section class="tree-wrap" id="tree" aria-label="Cây tri ân">
+    <svg viewBox="0 0 600 560" aria-hidden="true">
+      <ellipse cx="300" cy="528" rx="230" ry="20" fill="#7aa955" opacity=".55"/>
+      <!-- Thân cây -->
+      <path d="M262 530 C272 470 276 420 270 360 C250 400 215 420 180 430 C220 400 255 370 262 330 L338 330 C346 370 382 395 425 405 C388 410 352 400 332 365 C326 420 330 475 342 530 Z" fill="#7a4f2b"/>
+      <path d="M290 520 C294 460 294 410 290 350 M312 520 C312 460 316 410 318 350" stroke="#5c3a1d" stroke-width="3" fill="none" opacity=".6"/>
+      <!-- Tán lá: sửa các hình tròn bên dưới để đổi dáng cây -->
+      <g>
+        <circle cx="150" cy="260" r="95" fill="#3f7a3c"/><circle cx="450" cy="260" r="95" fill="#3f7a3c"/>
+        <circle cx="300" cy="170" r="140" fill="#4f8a45"/><circle cx="190" cy="180" r="100" fill="#5a9a4d"/>
+        <circle cx="410" cy="180" r="100" fill="#5a9a4d"/><circle cx="300" cy="290" r="110" fill="#4f8a45"/>
+        <circle cx="240" cy="110" r="70" fill="#72b05c"/><circle cx="370" cy="120" r="64" fill="#72b05c"/>
+        <circle cx="120" cy="190" r="55" fill="#72b05c" opacity=".8"/><circle cx="485" cy="190" r="55" fill="#72b05c" opacity=".8"/>
+        <circle cx="210" cy="300" r="12" fill="#ee7a5c"/><circle cx="395" cy="305" r="10" fill="#ee7a5c"/><circle cx="305" cy="85" r="9" fill="#ee7a5c"/>
+      </g>
+    </svg>
+  </section>
+  <p class="hint">Chạm vào phong bì để đọc lời chúc</p>
+
+  <!-- ===== KHUNG VIẾT THƯ ===== -->
+  <form class="card" id="form" autocomplete="off">
+    <div class="stamp" aria-hidden="true">🌸</div>
+    <h2>Gửi lời chúc lên cây tri ân</h2>
+    <label for="who">Tên lớp / Người gửi</label>
+    <input id="who" maxlength="40" placeholder="Ví dụ: Tập thể lớp 12A7" required>
+    <label for="wish">Nội dung lời chúc</label>
+    <textarea id="wish" maxlength="400" placeholder="Em kính chúc thầy cô..." required></textarea>
+    <button type="submit">Gửi lên cây</button>
+  </form>
+  <footer class="credit">Website editor: <strong>Hoàng Thiên</strong></footer>
+</main>
+
+<!-- Modal đọc thư -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Lá thư">
+  <div class="paper">
+    <button class="x" id="close" aria-label="Đóng">&times;</button>
+    <div class="cls" id="mClass"></div>
+    <div class="photo" id="mPhoto"><img id="mImg" alt="Ảnh người gửi"></div>
+    <div class="msg" id="mMsg"></div>
+  </div>
+</div>
+
+<!-- Thông báo hướng dẫn khi mới vào web (sửa nội dung tại đây) -->
+<div class="modal open" id="guide" role="dialog" aria-modal="true" aria-labelledby="gTitle">
+  <div class="guide">
+    <h2 id="gTitle">Đây là cách để sử dụng web tri ân thầy cô 20/11</h2>
+    <ul>
+      <li>Bấm vào thư trên cây để xem ảnh và lời chúc của các bạn</li>
+      <li>Bấm vào màn hình để phát nhạc</li>
+      <li>Viết thư ở dưới nếu bạn muốn</li>
+    </ul>
+    <p>Xin cảm ơn :3</p>
+    <button id="gOk">Bắt đầu thôi</button>
+  </div>
+</div>
+
+<!-- ===== NHẠC NỀN =====
+     Đặt file nhạc cùng thư mục với index.html. Muốn đổi bài: sửa đường dẫn src bên dưới. -->
+<audio id="bgm" src="co-hen-voi-thanh-xuan.mp3" loop preload="auto"></audio>
+<span id="musicLabel">Có hẹn với thanh xuân</span>
+<button id="music" aria-label="Bật / tắt nhạc nền" title="Bật / tắt nhạc"></button>
+
+<script>
+/* ===== DỮ LIỆU THƯ MẪU (sửa/ thêm tại đây) ===== */
+/* img = đường dẫn ảnh của người gửi. Tạo thư mục "anh" cạnh index.html, rồi thay tên file thật (jpg/png).
+   Nếu không có ảnh thì xóa phần img:"..." của thư đó. */
+const SAMPLES = [
+  {c:"Hoàng Thiên", img:"anh/hoang-thien.jpg", m:"Em cảm ơn thầy cô đã kiên nhẫn dìu dắt chúng em suốt những năm tháng học trò. Chúc thầy cô luôn mạnh khỏe và hạnh phúc!"},
+  {c:"Lớp 12A8", img:"anh/lop-12a8.jpg", m:"Tập thể lớp 12A8 xin gửi đến thầy cô lời tri ân sâu sắc nhất. Cảm ơn thầy cô đã là những người lái đò thầm lặng của chúng em."},
+  {c:"Xuân Thuyền", img:"anh/xuan-thuyen.jpg", m:"Mỗi bài giảng của thầy cô là một chuyến đò chở chúng em đến bờ tri thức. Em cảm ơn thầy cô rất nhiều!"},
+  {c:"Huy Bảo", img:"anh/huy-bao.jpg", m:"Chúc thầy cô luôn tràn đầy năng lượng. Giờ học của thầy cô là giờ em mong chờ nhất!"},
+  {c:"Thanh Triều", img:"anh/thanh-trieu.jpg", m:"Cảm ơn thầy cô đã tin tưởng và không bỏ rơi những bạn học chậm như tụi em."},
+  {c:"Hoàng Việt", img:"anh/hoang-viet.jpg", m:"Sắp xa mái trường rồi, em chỉ mong thầy cô nhớ chúng em là những đứa học trò hay nghịch nhưng rất thương thầy cô."},
+  {c:"Minh Nhật", img:"anh/minh-nhat.jpg", m:"Em chúc thầy cô ngày 20/11 thật nhiều niềm vui và sức khỏe. Mãi biết ơn những người lái đò."},
+  {c:"Hoàng Khải", img:"anh/hoang-khai.jpg", m:"Cảm ơn thầy cô đã dạy em kiến thức và cả cách làm người. Chúc thầy cô luôn hạnh phúc!"},
+  {c:"Minh An", img:"anh/minh-an.jpg", m:"Hôm nay em tặng thầy cô một lá thư nhỏ. Chúc thầy cô thật nhiều niềm vui và luôn mỉm cười!"}
+];
+const KEY = "tri-an-letters-v1";
+const tree = document.getElementById("tree");
+
+/* ===== VỊ TRÍ PHONG BÌ (tọa độ % trong khung cây) ===== */
+const SLOTS = [[22,20],[48,12],[72,22],[14,42],[38,34],[62,40],[84,44],[30,52],[54,56],[76,58]];
+let used = 0;
+
+function save(list){ try{ localStorage.setItem(KEY, JSON.stringify(list)); }catch(e){} }
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)) || []; }catch(e){ return []; } }
+
+/* Tạo 1 phong bì treo lên cây */
+function addEnvelope(letter, isNew, pos){
+  const [x,y] = pos || (used < SLOTS.length ? SLOTS[used] : [12+Math.random()*72, 8+Math.random()*50]);
+  used++;
+  const b = document.createElement("button");
+  b.className = "env" + (isNew ? " new" : "");
+  b.style.left = x + "%"; b.style.top = y + "%";
+  b.style.animationDelay = (Math.random()*-4) + "s";
+  b.setAttribute("aria-label", "Đọc thư của " + letter.c);
+  b.innerHTML = '<span class="body"></span><span class="flap"></span><span class="seal"></span><span class="tag"></span>';
+  b.querySelector(".tag").textContent = letter.c;
+  b.addEventListener("click", e => { e.stopPropagation(); openLetter(letter); burst(e.clientX, e.clientY, 14); });
+  tree.appendChild(b);
+}
+SAMPLES.forEach(l => addEnvelope(l));
+load().forEach(l => addEnvelope(l));
+
+/* ===== MODAL ===== */
+const modal = document.getElementById("modal");
+function openLetter(l){
+  document.getElementById("mClass").textContent = "Gửi thầy cô, " + l.c;
+  document.getElementById("mMsg").textContent = l.m;
+  const ph = document.getElementById("mPhoto"), im = document.getElementById("mImg");
+  ph.style.display = "none";                       // chỉ hiện khung ảnh khi ảnh tải được
+  if(l.img){ im.onload = () => ph.style.display = "block"; im.onerror = () => ph.style.display = "none"; im.src = l.img; }
+  modal.classList.add("open"); document.getElementById("close").focus();
+}
+function closeModal(){ modal.classList.remove("open"); }
+document.getElementById("close").onclick = closeModal;
+modal.addEventListener("click", e => { if(e.target === modal) closeModal(); });
+const guide = document.getElementById("guide");
+document.getElementById("gOk").onclick = () => guide.classList.remove("open");
+guide.querySelector("#gOk").focus();
+addEventListener("keydown", e => { if(e.key === "Escape"){ closeModal(); guide.classList.remove("open"); } });
+
+/* ===== GỬI THƯ MỚI ===== */
+document.getElementById("form").addEventListener("submit", e => {
+  e.preventDefault();
+  const c = who.value.trim(), m = wish.value.trim();
+  if(!c || !m) return;
+  const letter = {c, m};
+  const list = load(); list.push(letter); save(list);
+  addEnvelope(letter, true);
+  e.target.reset();
+  const r = tree.getBoundingClientRect();
+  tree.scrollIntoView({behavior:"smooth", block:"center"});
+  burst(r.left + r.width/2, r.top + r.height/2, 40);
+  chime();
+});
+
+/* ===== NỀN: CÁNH HOA PHƯỢNG & TRANG GIẤY BAY ===== */
+const bg = document.getElementById("bg"), bx = bg.getContext("2d");
+const fx = document.getElementById("fx"), fc = fx.getContext("2d");
+let W, H, petals = [];
+function resize(){
+  const d = devicePixelRatio || 1;
+  for(const c of [bg, fx]){ c.width = innerWidth*d; c.height = innerHeight*d; c.getContext("2d").setTransform(d,0,0,d,0,0); }
+  W = innerWidth; H = innerHeight;
+}
+addEventListener("resize", resize); resize();
+const COLORS = ["#e8503a","#ee7a5c","#f59a7a","#fff4d6"]; // phượng đỏ, san hô, hồng đào, giấy
+function mkPetal(top){
+  const paper = Math.random() < .2;
+  return {x:Math.random()*W, y: top ? -20 : Math.random()*H, s: 6+Math.random()*9, vy: .5+Math.random()*.9,
+    vx: -.3+Math.random()*.6, a: Math.random()*6.28, va: (Math.random()-.5)*.04, ph: Math.random()*6.28,
+    paper, col: paper ? COLORS[3] : COLORS[Math.floor(Math.random()*3)]};
+}
+const N = Math.round(Math.min(60, innerWidth/16));
+for(let i=0;i<N;i++) petals.push(mkPetal(false));
+function drawBg(t){
+  bx.clearRect(0,0,W,H);
+  for(const p of petals){
+    p.y += p.vy; p.x += p.vx + Math.sin(t/900 + p.ph)*.6; p.a += p.va;
+    if(p.y > H+20 || p.x < -30 || p.x > W+30) Object.assign(p, mkPetal(true));
+    bx.save(); bx.translate(p.x, p.y); bx.rotate(p.a); bx.fillStyle = p.col; bx.globalAlpha = .85;
+    if(p.paper){ bx.fillRect(-p.s/2, -p.s*.7, p.s, p.s*1.4); bx.strokeStyle = "#e7d3a0"; bx.strokeRect(-p.s/2, -p.s*.7, p.s, p.s*1.4); }
+    else { bx.beginPath(); bx.ellipse(0, 0, p.s*.5, p.s, 0, 0, 6.28); bx.fill(); }
+    bx.restore();
+  }
+}
+
+/* ===== HIỆU ỨNG CHUỘT / CHẠM: HẠT LẤP LÁNH, TIM, CÁNH HOA ===== */
+let parts = [];
+function burst(x, y, n){
+  for(let i=0;i<n;i++){
+    const a = Math.random()*6.28, v = 1+Math.random()*3.5, k = Math.random();
+    parts.push({x, y, vx:Math.cos(a)*v, vy:Math.sin(a)*v - 1, life:1, d:.015+Math.random()*.02,
+      s:6+Math.random()*8, kind: k<.4 ? "♥" : k<.7 ? "✦" : "●", col: COLORS[Math.floor(Math.random()*3)]});
+  }
+}
+let lastMove = 0;
+addEventListener("pointermove", e => { const n = Date.now(); if(n - lastMove > 60){ lastMove = n; burst(e.clientX, e.clientY, 2); } });
+addEventListener("pointerdown", e => { burst(e.clientX, e.clientY, 18); if(e.target.closest("#music") === null) chime(); });
+function drawFx(){
+  fc.clearRect(0,0,W,H);
+  parts = parts.filter(p => p.life > 0);
+  for(const p of parts){
+    p.x += p.vx; p.y += p.vy; p.vy += .06; p.life -= p.d;
+    fc.globalAlpha = Math.max(p.life,0); fc.fillStyle = p.col; fc.font = p.s + "px sans-serif";
+    fc.fillText(p.kind, p.x, p.y);
+  }
+  fc.globalAlpha = 1;
+}
+function loop(t){ drawBg(t); drawFx(); requestAnimationFrame(loop); }
+if(!matchMedia("(prefers-reduced-motion: reduce)").matches) requestAnimationFrame(loop);
+
+/* ===== ÂM THANH NHẸ (tùy chọn, đổi false để tắt) ===== */
+const SOUND_FX = false;
+let ac, lastChime = 0;
+function chime(){
+  if(!SOUND_FX || Date.now() - lastChime < 150) return; lastChime = Date.now();
+  try{
+    ac = ac || new (window.AudioContext || window.webkitAudioContext)();
+    const o = ac.createOscillator(), g = ac.createGain(), f = [880,1047,1319][Math.floor(Math.random()*3)];
+    o.type = "sine"; o.frequency.value = f; g.gain.setValueAtTime(.04, ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(.0001, ac.currentTime + .5);
+    o.connect(g).connect(ac.destination); o.start(); o.stop(ac.currentTime + .5);
+  }catch(e){}
+}
+
+/* ===== NHẠC NỀN: tự phát ở lần click đầu tiên, nút đĩa than Bật/Tắt ===== */
+const bgm = document.getElementById("bgm"), disc = document.getElementById("music");
+bgm.volume = .5;
+function sync(){ disc.classList.toggle("on", !bgm.paused); }
+bgm.addEventListener("play", sync); bgm.addEventListener("pause", sync);
+let started = false;
+function firstPlay(e){
+  if(started) return; started = true;
+  removeEventListener("pointerdown", firstPlay);
+  if(e.target.closest("#music")) return;            // bấm nút đĩa: để nút tự xử lý
+  bgm.play().catch(() => {});
+}
+addEventListener("pointerdown", firstPlay);
+disc.addEventListener("click", () => { started = true; bgm.paused ? bgm.play().catch(()=>{}) : bgm.pause(); });
+</script>
+</body>
+</html>
